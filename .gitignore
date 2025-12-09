@@ -1,0 +1,61 @@
+# -------------------------
+# macOS system junk
+# -------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# -------------------------
+# Editors / temp files
+# -------------------------
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# VS Code
+.vscode/
+.history/
+
+# JetBrains
+.idea/
+
+# -------------------------
+# Python (future rewrite)
+# -------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+
+# -------------------------
+# Logs
+# -------------------------
+*.log
+
+# -------------------------
+# Build artifacts (future)
+# -------------------------
+dist/
+build/
+*.pkg
+*.dmg
+
+# -------------------------
+# Node modules (if any)
+# -------------------------
+node_modules/
+
+# -------------------------
+# Shell history / misc
+# -------------------------
+*.sh~
