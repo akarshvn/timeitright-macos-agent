@@ -53,22 +53,28 @@ def getActiveTabURL(browser: str) -> str | None:
 def main():
       print("Starting...\nClick Control + C to Stop.\n")
 
+      lastFrontmostApp = ""
+      lastActiveTabURL = ""
+
       while True:           
             timeStamp = datetime.datetime.now().replace(microsecond=0)
             frontmostApp = getFrontmostApp().strip()
-            
+            activeTabURL = getActiveTabURL(frontmostApp)
+
             if frontmostApp is None:
                   print("Frontmost App: (unknown error or applescript timed out)")
                   time.sleep(POLL_SECONDS)
                   
-            if frontmostApp in supportedBrowsers:
-                  activeTabURL = getActiveTabURL(frontmostApp)
-
+            if frontmostApp in supportedBrowsers and frontmostApp != lastFrontmostApp or lastActiveTabURL != activeTabURL:
+                  lastFrontmostApp = frontmostApp
+                  lastActiveTabURL = activeTabURL
+                  
                   print("---"*20)
                   print(f"|{timeStamp} | Frontmost: {frontmostApp} | URL: {activeTabURL} |")
                   print("---"*20)
 
-            else:
+            elif frontmostApp != lastFrontmostApp:
+                  lastFrontmostApp = frontmostApp
                   print("---"*20)
                   print(f"|{timeStamp} | Frontmost: {frontmostApp} | URL: (none) |")
                   print("---"*20)
