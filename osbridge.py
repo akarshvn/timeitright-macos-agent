@@ -50,34 +50,49 @@ def getActiveTabURL(browser: str) -> str | None:
       else:
             return None      
 
+def getMinimizedState(frontmostApp: str) -> str | None:
+      script = f'''
+      tell application "System Events"
+			tell process "{frontmostApp}"
+				if exists window 1 then
+					return value of attribute "AXMinimized" of window 1
+				end if
+			end tell
+		end tell
+      '''
+      return runAppleScript(script)
+
 def main():
       print("Starting...\nClick Control + C to Stop.\n")
 
       lastFrontmostApp = ""
       lastActiveTabURL = ""
+      lastMinimizedState = ""
 
       while True:           
             timeStamp = datetime.datetime.now().replace(microsecond=0)
             frontmostApp = getFrontmostApp().strip()
             activeTabURL = getActiveTabURL(frontmostApp)
+            isMinimizedState = getMinimizedState(frontmostApp)
 
             if frontmostApp is None:
                   print("Frontmost App: (unknown error or applescript timed out)")
                   time.sleep(POLL_SECONDS)
                   
-            if frontmostApp in supportedBrowsers and frontmostApp != lastFrontmostApp or lastActiveTabURL != activeTabURL:
+            if frontmostApp in supportedBrowsers and frontmostApp != lastFrontmostApp or lastActiveTabURL != activeTabURL or lastMinimizedState != isMinimizedState:
                   lastFrontmostApp = frontmostApp
                   lastActiveTabURL = activeTabURL
-                  
-                  print("---"*20)
-                  print(f"|{timeStamp} | Frontmost: {frontmostApp} | URL: {activeTabURL} |")
-                  print("---"*20)
+                  lastMinimizedState = isMinimizedState
+
+                  print("---"*30)
+                  print(f"|{timeStamp} | Frontmost: {frontmostApp} | Minimized: {isMinimizedState} | URL: {activeTabURL} |")
+                  print("---"*30)
 
             elif frontmostApp != lastFrontmostApp:
                   lastFrontmostApp = frontmostApp
-                  print("---"*20)
-                  print(f"|{timeStamp} | Frontmost: {frontmostApp} | URL: (none) |")
-                  print("---"*20)
+                  print("---"*30)
+                  print(f"|{timeStamp} | Frontmost: {frontmostApp} | Minimized: {isMinimizedState} | URL: (none) |")
+                  print("---"*30)
 
             time.sleep(POLL_SECONDS)
 
